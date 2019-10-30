@@ -1,7 +1,12 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    // nome, email, idade, peso e altura.
     return queryInterface.createTable('students', {
+      id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+      },
       name: {
         type: Sequelize.STRING,
         allowNull: false,
