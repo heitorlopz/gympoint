@@ -9,7 +9,7 @@ class PlanController {
       where: {
         user_id: req.userId,
       },
-      order: ['updated_at'],
+      order: [['updated_at', 'DESC']],
     });
 
     const checkUserProvider = await User.findOne({
@@ -133,9 +133,11 @@ class PlanController {
       return res.status(401).json({ error: 'User is not a provider.' });
     }
 
-    plan.canceled_at = new Date();
-
-    await plan.save();
+    Plan.destroy({
+      where: {
+        id: planId,
+      },
+    });
 
     return res.json(plan);
   }
