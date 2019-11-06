@@ -94,6 +94,10 @@ class PlanController {
 
     const plan = await Plan.findByPk(planId);
 
+    if (!plan) {
+      return res.status(400).json({ error: 'Plan does not exist.' });
+    }
+
     if (name !== plan.name) {
       const planExists = await Plan.findOne({
         where: { name },
@@ -122,6 +126,10 @@ class PlanController {
 
     const plan = await Plan.findByPk(planId);
 
+    if (!plan) {
+      return res.status(400).json({ error: 'Plan does not exist.' });
+    }
+
     const checkUserProvider = await User.findOne({
       where: {
         id: req.userId,
@@ -139,7 +147,9 @@ class PlanController {
       },
     });
 
-    return res.json(plan);
+    return res.json({
+      message: `O plano '${plan.name}' foi excluído com sucesso!`,
+    });
   }
 }
 
