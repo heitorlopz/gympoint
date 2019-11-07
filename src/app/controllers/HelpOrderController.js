@@ -1,5 +1,6 @@
-import { parseISO } from 'date-fns';
+import { format } from 'date-fns';
 import * as Yup from 'yup';
+import pt from 'date-fns/locale/pt';
 import Student from '../models/Student';
 import User from '../models/User';
 import HelpOrder from '../schemas/HelpOrder';
@@ -80,20 +81,15 @@ class HelpOrderController {
 
     await Mail.sendMail({
       to: `${student.name} <${student.email}>`,
-      subject: 'Bem vindo!',
-      template: 'enrollment',
+      subject: 'Aqui está sua resposta!',
+      template: 'helporder',
       context: {
         student: student.name,
-        plan: `${plan.name} (${plan.duration} ${
-          plan.duration > 1 ? 'meses' : 'mês'
-        })`,
-        price: `R$${plan.price}`,
-        start_date: format(parseISO(start_date), 'MM/dd/yyyy', {
+        message_date: format(helpOrder.createdAt, 'MM/dd/yyyy', {
           locale: pt,
         }),
-        end_date: format(end_date, 'MM/dd/yyyy', {
-          locale: pt,
-        }),
+        question: helpOrder.question_content,
+        answer: answer_content,
       },
     });
 
