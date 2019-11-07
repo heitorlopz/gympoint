@@ -1,8 +1,6 @@
-import { parseISO, subDays } from 'date-fns';
-import mongoose from 'mongoose';
-import Student from '../models/Student';
+import { subDays } from 'date-fns';
 import Enrollment from '../models/Enrollment';
-import User from '../models/User';
+import Student from '../models/Student';
 import Checkin from '../schemas/Checkin';
 
 class CheckinController {
@@ -50,13 +48,20 @@ class CheckinController {
   async store(req, res) {
     const studentId = req.params.id;
 
-    const checkStudentEnrollment = await Enrollment.findOne({
+    const checkStudent = await Enrollment.findOne({
       where: {
         student_id: studentId,
+        include: [
+          {
+            model: Student,
+            as: 'student',
+            attributes: ['name'],
+          },
+        ],
       },
     });
 
-    if (!checkStudentEnrollment) {
+    if (!checkStudent) {
       return res.status(401).json({ error: 'User is not enrolled.' });
     }
 
@@ -74,7 +79,9 @@ class CheckinController {
       user: studentId,
     });
 
-    return res.json();
+    return res.json({
+      message: `${checkStudent.student.name} acabou de entrar na academia!`,
+    });
   }
 }
 

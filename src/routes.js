@@ -6,6 +6,8 @@ import SessionController from './app/controllers/SessionController';
 import PlanController from './app/controllers/PlanController';
 import EnrollmentController from './app/controllers/EnrollmentController';
 import CheckinController from './app/controllers/CheckinController';
+import HelpOrderController from './app/controllers/HelpOrderController';
+import HelpOrderStudentController from './app/controllers/HelpOrderStudentController';
 
 import authMiddleware from './app/middlewares/auth';
 
@@ -16,6 +18,9 @@ routes.post('/sessions', SessionController.store);
 
 routes.get('/students/:id/checkins', CheckinController.index);
 routes.post('/students/:id/checkins', CheckinController.store);
+
+routes.get('/students/:id/help-orders', HelpOrderStudentController.index);
+routes.post('/students/:id/help-orders', HelpOrderStudentController.store);
 
 routes.use(authMiddleware);
 
@@ -31,5 +36,8 @@ routes.get('/enrollments', EnrollmentController.index);
 routes.post('/enrollments', EnrollmentController.store);
 routes.put('/enrollments/:id', EnrollmentController.update);
 routes.delete('/enrollments/:id', EnrollmentController.delete);
+
+routes.get('/help-order', HelpOrderController.index);
+routes.post('/help-order/:id/answer', HelpOrderController.store);
 
 export default routes;
