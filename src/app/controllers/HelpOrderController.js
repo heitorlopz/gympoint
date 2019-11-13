@@ -1,11 +1,10 @@
-import { format } from 'date-fns';
 import * as Yup from 'yup';
-import pt from 'date-fns/locale/pt';
 import Student from '../models/Student';
 import User from '../models/User';
 import HelpOrder from '../schemas/HelpOrder';
 
-import Mail from '../../lib/Mail';
+import HelpOrderMail from '../jobs/HelpOrderMail';
+import Queue from '../../lib/Queue';
 
 class HelpOrderController {
   async index(req, res) {
@@ -79,18 +78,10 @@ class HelpOrderController {
 
     const student = await Student.findByPk(studentId);
 
-    await Mail.sendMail({
-      to: `${student.name} <${student.email}>`,
-      subject: 'Aqui está sua resposta!',
-      template: 'helporder',
-      context: {
-        student: student.name,
-        message_date: format(helpOrder.createdAt, 'MM/dd/yyyy', {
-          locale: pt,
-        }),
-        question: helpOrder.question_content,
-        answer: answer_content,
-      },
+    await Queue.add(HelpOrderMail.key, {
+      student,
+      helpOrder,
+      answer_content,
     });
 
     return res.json();
