@@ -10,7 +10,7 @@ class App {
   constructor() {
     this.server = express();
 
-    //    Sentry.init(sentryConfig);
+    Sentry.init(sentryConfig);
 
     this.middlewares();
     this.routes();
@@ -22,7 +22,7 @@ class App {
 
   routes() {
     this.server.use(routes);
-    //    this.server.use(Sentry.Handlers.errorHandler());
+    this.server.use(Sentry.Handlers.errorHandler());
   }
 }
 

@@ -10,8 +10,6 @@ class EnrollmentMail {
   async handle({ data }) {
     const { student, plan, start_date, end_date } = data;
 
-    console.log('eita, matriculou');
-
     await Mail.sendMail({
       to: `${student.name} <${student.email}>`,
       subject: 'Bem vindo!',
